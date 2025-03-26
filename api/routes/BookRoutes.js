@@ -43,12 +43,13 @@ bookRouter.get("/deletebook", async (req, res) => {
   });
   bookRouter.get("/addbook", async (req, res) => {
     try {
-        var title="John the Baptist";
-        var author="John";
-        var price=200;
-        var catid=5;
+      var book=req.body;
+      var title=book.title;
+      var author=book.author;
+      var price=book.price;
+      var catid=book.category_id.id;
         
-        var qry="INSERT INTO books (title,author,price,catid) VALUES ('"+title+"','"+author+"',"+price+","+catid+")";
+        var qry="INSERT into books (title,author,price,catid) VALUES ('"+title+"','"+author+"',"+price+","+catid+")";
 
       const result = await pool.query(qry);
       console.log(result);
@@ -60,4 +61,26 @@ bookRouter.get("/deletebook", async (req, res) => {
      
     }
   });
+  bookRouter.post("/updatebook", async (req, res) => {
+    try {
+        var book=req.body;
+        var title=book.title;
+        var author=book.author;
+        var price=book.price;
+        var catid=book.category_id.id;
+        var id=book.id
+        
+        var qry="UPDATE books SET title='"+title+"', author='"+author+"', price="+price+", catid="+catid+" WHERE id="+id;
+
+      const result = await pool.query(qry);
+      console.log(result);
+      res.json({ans:1});
+     
+    } catch (error) {
+      console.error("Query error:", error);
+      res.json({ans:0});
+     
+    }
+  });
+
   export default bookRouter;
